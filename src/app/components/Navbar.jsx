@@ -106,8 +106,7 @@ export default function Navbar() {
                 className="group relative overflow-hidden bg-gradient-to-r from-[#6C5F8D] via-[#9C8CB9] to-[#BA96C1] hover:from-[#4B3F6E] hover:via-[#6C5F8D] hover:to-[#9C8CB9] text-white font-semibold px-6 py-3 rounded-full shadow-lg hover:shadow-xl hover:shadow-[#9C8CB9]/40 transition-all duration-300 hover:scale-105 border-0"
               >
                 <span className="relative z-10 flex items-center space-x-2">
-                  <span>Get Started</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
+                  <span>Dashboard</span>
                 </span>
                 <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </Button>
@@ -177,7 +176,7 @@ export default function Navbar() {
                   <Button 
                     className="w-full bg-gradient-to-r from-[#6C5F8D] to-[#9C8CB9] hover:from-[#4B3F6E] hover:to-[#6C5F8D] text-white py-3 font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02]"
                   >
-                    Get Started Free
+                    Dashboard
                   </Button>
                 </div>
               </nav>

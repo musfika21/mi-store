@@ -1,5 +1,10 @@
 "use client"
 import { useState } from "react"
+import { HeroSection } from "./components/Hero"
+import { FeaturesSection } from "./components/Features"
+import { TestimonialsSection } from "./components/Testimonials"
+import { FAQSection } from "./components/FAQ"
+import { CTASection } from "./components/CTA"
 
 export default function Page() {
   const [dark, setDark] = useState(false)
@@ -14,16 +19,13 @@ export default function Page() {
   }
 
   return (
-    <div className="h-screen flex flex-col items-center justify-center">
-      <h1 className="text-4xl font-bold text-red-500 dark:text-blue-300">
-        Hello Tailwind Dark Mode
-      </h1>
-      <button 
-        onClick={toggleTheme}
-        className="mt-6 px-4 py-2 bg-gray-200 dark:bg-gray-800 dark:text-white rounded"
-      >
-        Toggle Dark Mode
-      </button>
-    </div>
+    <>
+      <HeroSection />
+      <FeaturesSection />
+      <TestimonialsSection/>
+      <FAQSection/>
+      <CTASection/>
+    </>
+
   )
 }
