@@ -13,8 +13,6 @@ export default function Navbar() {
   const navItems = [
     { href: "/", label: "Home", icon: "🏠" },
     { href: "/about", label: "About", icon: "✨" },
-    { href: "/services", label: "Services", icon: "⚡" },
-    { href: "/portfolio", label: "Portfolio", icon: "🎨" },
     { href: "/contact", label: "Contact", icon: "💌" },
   ]
 
@@ -22,7 +20,7 @@ export default function Navbar() {
     <>
       {/* Animated background glow */}
       <div className="fixed top-0 left-0 right-0 h-20 bg-gradient-to-r from-[#BA96C1]/20 via-[#9C8CB9]/30 to-[#6C5F8D]/20 blur-xl -z-10 animate-pulse"></div>
-      
+
       <header className="sticky top-0 z-50 backdrop-blur-xl bg-[#DCD7D5]/70 dark:bg-[#4B3F6E]/80 border-b border-[#BA96C1]/30 dark:border-[#9C8CB9]/40 shadow-2xl shadow-[#BA96C1]/20 dark:shadow-[#4B3F6E]/40">
         {/* Floating orbs decoration */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -33,10 +31,10 @@ export default function Navbar() {
 
         <div className="container mx-auto px-6 sm:px-8 lg:px-12">
           <div className="flex h-20 items-center justify-between">
-            
+
             {/* Logo with magical elements */}
-            <Link 
-              href="/" 
+            <Link
+              href="/"
               className="group flex items-center space-x-3 hover:scale-105 transition-all duration-300"
             >
               <div className="relative">
@@ -60,32 +58,29 @@ export default function Navbar() {
                   key={item.href}
                   href={item.href}
                   onClick={() => setActiveItem(item.href)}
-                  className={`relative text-sm font-semibold transition-all duration-300 group flex items-center space-x-2 px-4 py-3 ${
-                    activeItem === item.href
-                      ? 'text-[#6C5F8D] dark:text-[#BA96C1]'
-                      : 'text-[#4B3F6E] dark:text-[#DCD7D5] hover:text-[#6C5F8D] dark:hover:text-[#BA96C1]'
-                  }`}
+                  className={`relative text-sm font-semibold transition-all duration-300 group flex items-center space-x-2 px-4 py-3 ${activeItem === item.href
+                    ? 'text-[#6C5F8D] dark:text-[#BA96C1]'
+                    : 'text-[#4B3F6E] dark:text-[#DCD7D5] hover:text-[#6C5F8D] dark:hover:text-[#BA96C1]'
+                    }`}
                   style={{
                     animationDelay: `${index * 100}ms`
                   }}
                 >
                   <span className="text-base">{item.icon}</span>
                   <span>{item.label}</span>
-                  
+
                   {/* Active state underline */}
-                  <div className={`absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#6C5F8D] to-[#9C8CB9] transform origin-left transition-all duration-300 ${
-                    activeItem === item.href
-                      ? 'scale-x-100 opacity-100'
-                      : 'scale-x-0 opacity-0'
-                  }`}></div>
-                  
+                  <div className={`absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#6C5F8D] to-[#9C8CB9] transform origin-left transition-all duration-300 ${activeItem === item.href
+                    ? 'scale-x-100 opacity-100'
+                    : 'scale-x-0 opacity-0'
+                    }`}></div>
+
                   {/* Hover underline */}
-                  <div className={`absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-[#BA96C1]/50 to-[#9C8CB9]/50 transform origin-left transition-all duration-300 ${
-                    activeItem === item.href
-                      ? 'scale-x-0'
-                      : 'scale-x-0 group-hover:scale-x-100'
-                  }`}></div>
-                  
+                  <div className={`absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-[#BA96C1]/50 to-[#9C8CB9]/50 transform origin-left transition-all duration-300 ${activeItem === item.href
+                    ? 'scale-x-0'
+                    : 'scale-x-0 group-hover:scale-x-100'
+                    }`}></div>
+
                   {/* Background highlight on hover */}
                   <div className="absolute inset-0 bg-gradient-to-r from-[#BA96C1]/5 to-[#9C8CB9]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </Link>
@@ -94,15 +89,17 @@ export default function Navbar() {
 
             {/* Right side with premium buttons */}
             <div className="hidden lg:flex items-center space-x-4">
-              <Button 
-                variant="ghost"
-                size="sm"
-                className="text-[#4B3F6E] dark:text-[#DCD7D5] hover:text-[#6C5F8D] dark:hover:text-[#BA96C1] hover:bg-[#BA96C1]/20 dark:hover:bg-[#9C8CB9]/20 font-medium"
-              >
-                Sign In
-              </Button>
-              
-              <Button 
+              <Link href="/sign-in">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-[#4B3F6E] dark:text-[#DCD7D5] hover:text-[#6C5F8D] dark:hover:text-[#BA96C1] hover:bg-[#BA96C1]/20 dark:hover:bg-[#9C8CB9]/20 font-medium cursor-pointer"
+                >
+                  Sign In
+                </Button>
+              </Link>
+
+              <Button
                 className="group relative overflow-hidden bg-gradient-to-r from-[#6C5F8D] via-[#9C8CB9] to-[#BA96C1] hover:from-[#4B3F6E] hover:via-[#6C5F8D] hover:to-[#9C8CB9] text-white font-semibold px-6 py-3 rounded-full shadow-lg hover:shadow-xl hover:shadow-[#9C8CB9]/40 transition-all duration-300 hover:scale-105 border-0"
               >
                 <span className="relative z-10 flex items-center space-x-2">
@@ -110,7 +107,7 @@ export default function Navbar() {
                 </span>
                 <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </Button>
-              
+
               <div className="w-px h-8 bg-gradient-to-b from-transparent via-[#BA96C1] to-transparent opacity-50"></div>
               <ModeToggle />
             </div>
@@ -132,9 +129,8 @@ export default function Navbar() {
           </div>
 
           {/* Mobile Navigation with clean geometric style */}
-          <div className={`lg:hidden overflow-hidden transition-all duration-500 ease-in-out ${
-            isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-          }`}>
+          <div className={`lg:hidden overflow-hidden transition-all duration-500 ease-in-out ${isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+            }`}>
             <div className="pb-6 pt-2">
               <nav className="flex flex-col space-y-1">
                 {navItems.map((item, index) => (
@@ -145,11 +141,10 @@ export default function Navbar() {
                       setIsMenuOpen(false)
                       setActiveItem(item.href)
                     }}
-                    className={`group relative flex items-center space-x-4 px-6 py-4 transition-all duration-300 hover:translate-x-2 border-l-4 ${
-                      activeItem === item.href
-                        ? 'border-l-[#6C5F8D] bg-gradient-to-r from-[#9C8CB9]/10 to-transparent text-[#6C5F8D] dark:text-[#BA96C1]'
-                        : 'border-l-transparent text-[#4B3F6E] dark:text-[#DCD7D5] hover:border-l-[#BA96C1]/50 hover:bg-gradient-to-r hover:from-[#BA96C1]/5 hover:to-transparent'
-                    }`}
+                    className={`group relative flex items-center space-x-4 px-6 py-4 transition-all duration-300 hover:translate-x-2 border-l-4 ${activeItem === item.href
+                      ? 'border-l-[#6C5F8D] bg-gradient-to-r from-[#9C8CB9]/10 to-transparent text-[#6C5F8D] dark:text-[#BA96C1]'
+                      : 'border-l-transparent text-[#4B3F6E] dark:text-[#DCD7D5] hover:border-l-[#BA96C1]/50 hover:bg-gradient-to-r hover:from-[#BA96C1]/5 hover:to-transparent'
+                      }`}
                     style={{
                       animationDelay: `${index * 50}ms`,
                       animation: isMenuOpen ? `slideIn 0.3s ease-out ${index * 50}ms both` : ''
@@ -158,22 +153,24 @@ export default function Navbar() {
                     <span className="text-2xl">{item.icon}</span>
                     <span className="font-semibold text-lg">{item.label}</span>
                     <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-200 ml-auto" />
-                    
+
                     {/* Active state indicator */}
                     {activeItem === item.href && (
                       <div className="absolute right-4 top-1/2 transform -translate-y-1/2 w-2 h-2 bg-gradient-to-br from-[#6C5F8D] to-[#9C8CB9] opacity-80"></div>
                     )}
                   </Link>
                 ))}
-                
+
                 <div className="pt-4 space-y-3 border-t border-[#BA96C1]/20 mt-4">
-                  <Button 
-                    variant="outline"
-                    className="w-full border-[#9C8CB9] text-[#4B3F6E] dark:text-[#DCD7D5] hover:bg-[#BA96C1]/20 dark:hover:bg-[#9C8CB9]/20 py-3 font-semibold"
-                  >
-                    Sign In
-                  </Button>
-                  <Button 
+                  <Link href="/sign-in">
+                    <Button
+                      variant="outline"
+                      className="w-full border-[#9C8CB9] text-[#4B3F6E] dark:text-[#DCD7D5] hover:bg-[#BA96C1]/20 dark:hover:bg-[#9C8CB9]/20 py-3 font-semibold cursor-pointer mb-2"
+                    >
+                      Sign In
+                    </Button>
+                  </Link>
+                  <Button
                     className="w-full bg-gradient-to-r from-[#6C5F8D] to-[#9C8CB9] hover:from-[#4B3F6E] hover:to-[#6C5F8D] text-white py-3 font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02]"
                   >
                     Dashboard
