@@ -30,9 +30,11 @@ import {
   Palette,
   Sparkles,
   Save,
-  Eye
+  Eye,
+  AlertCircle
 } from "lucide-react";
 import Image from 'next/image';
+import toast, { Toaster } from 'react-hot-toast';
 
 export default function AddFlower() {
   const [formData, setFormData] = useState({
@@ -50,10 +52,11 @@ export default function AddFlower() {
     discountPercentage: '',
     tags: []
   });
-
   const [imagePreview, setImagePreview] = useState(null);
   const [dragActive, setDragActive] = useState(false);
   const [newTag, setNewTag] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState(null);
 
   // Predefined options
   const categories = [
@@ -76,6 +79,7 @@ export default function AddFlower() {
       ...prev,
       [field]: value
     }));
+    setError(null); // Clear error on input change
   };
 
   const handleImageUpload = (file) => {
@@ -112,6 +116,7 @@ export default function AddFlower() {
         ? prev.occasion.filter(o => o !== occasion)
         : [...prev.occasion, occasion]
     }));
+    setError(null);
   };
 
   const addTag = () => {
@@ -121,6 +126,7 @@ export default function AddFlower() {
         tags: [...prev.tags, newTag.trim()]
       }));
       setNewTag('');
+      setError(null);
     }
   };
 
@@ -129,19 +135,85 @@ export default function AddFlower() {
       ...prev,
       tags: prev.tags.filter(tag => tag !== tagToRemove)
     }));
+    setError(null);
   };
 
-  const handleSubmit = () => {
-    // Validation
-    if (!formData.name || !formData.description || !formData.pricePerPiece || !formData.minimumPurchase || !formData.availableAmount || !formData.category || !formData.color) {
-      alert('Please fill in all required fields!');
+  const validateForm = () => {
+    if (!formData.name) return 'Flower name is required';
+    if (!formData.description) return 'Description is required';
+    if (!formData.pricePerPiece || isNaN(formData.pricePerPiece) || formData.pricePerPiece <= 0) return 'Valid price per piece is required';
+    if (!formData.minimumPurchase || isNaN(formData.minimumPurchase) || formData.minimumPurchase <= 0) return 'Valid minimum purchase is required';
+    if (!formData.availableAmount || isNaN(formData.availableAmount) || formData.availableAmount <= 0) return 'Valid available amount is required';
+    if (!formData.category) return 'Category is required';
+    if (!formData.color) return 'Color is required';
+    if (!imagePreview) return 'Flower image is required';
+    return null;
+  };
+
+  const handleSubmit = async () => {
+    setError(null);
+    setIsSubmitting(true);
+
+    // Validate form
+    const validationError = validateForm();
+    if (validationError) {
+      setError(validationError);
+      setIsSubmitting(false);
+      toast.error(validationError);
       return;
     }
 
-    // Here you would typically send the data to your API
-    console.log('Form Data:', formData);
-    console.log('Image:', imagePreview);
-    alert('Flower added successfully! (Check console for data)');
+    try {
+      // Prepare data for API
+      const dataToSend = {
+        ...formData,
+        pricePerPiece: parseFloat(formData.pricePerPiece),
+        minimumPurchase: parseInt(formData.minimumPurchase),
+        availableAmount: parseInt(formData.availableAmount),
+        discountPercentage: formData.discountPercentage ? parseFloat(formData.discountPercentage) : 0,
+        image: imagePreview // Base64 encoded image
+      };
+
+      const response = await fetch('http://localhost:3000/api/items', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dataToSend),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to add flower');
+      }
+
+      const result = await response.json();
+      console.log('Flower added:', result);
+      toast.success('Flower added successfully!');
+
+      // Reset form
+      setFormData({
+        name: '',
+        description: '',
+        pricePerPiece: '',
+        minimumPurchase: '',
+        availableAmount: '',
+        category: '',
+        color: '',
+        occasion: [],
+        careInstructions: '',
+        freshnessDuration: '',
+        isSeasonalSpecial: false,
+        discountPercentage: '',
+        tags: []
+      });
+      setImagePreview(null);
+      setNewTag('');
+    } catch (err) {
+      setError(err.message);
+      toast.error(`Error: ${err.message}`);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const calculateDiscountedPrice = () => {
@@ -152,6 +224,7 @@ export default function AddFlower() {
 
   return (
     <div className="space-y-6">
+      <Toaster position="top-right" />
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -171,6 +244,13 @@ export default function AddFlower() {
         </Badge>
       </div>
 
+      {error && (
+        <div className="bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 p-4 rounded-lg flex items-center">
+          <AlertCircle className="w-5 h-5 mr-2" />
+          {error}
+        </div>
+      )}
+
       <div className="space-y-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Image Upload Section */}
@@ -184,13 +264,11 @@ export default function AddFlower() {
             </CardHeader>
             <CardContent className="space-y-4">
               {/* Image Upload Area */}
-              {/* Image Upload Area */}
               <div
-                className={`relative border-2 border-dashed rounded-xl p-6 text-center transition-all duration-300 
-    ${dragActive
+                className={`relative border-2 border-dashed rounded-xl p-6 text-center transition-all duration-300 ${dragActive
                     ? 'border-[#9C8CB9] bg-[#BA96C1]/50'
-                    : 'border-[#BA96C1]/30 hover:border-[#9C8CB9]/50'} 
-    bg-[#f9f9f9] dark:bg-[#1a1a1a]`}   // ✅ light/dark background
+                    : 'border-[#BA96C1]/30 hover:border-[#9C8CB9]/50'
+                  } bg-[#f9f9f9] dark:bg-[#1a1a1a]`}
                 onDrop={handleDrop}
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
@@ -201,7 +279,7 @@ export default function AddFlower() {
                       src={imagePreview}
                       alt="Preview"
                       fill
-                      className="object-cover rounded-lg"  // ✅ সুন্দরভাবে fit হবে
+                      className="object-cover rounded-lg"
                       unoptimized
                     />
                     <Button
@@ -239,7 +317,6 @@ export default function AddFlower() {
                   </div>
                 )}
               </div>
-
             </CardContent>
           </Card>
 
@@ -539,6 +616,7 @@ export default function AddFlower() {
             type="button"
             variant="outline"
             className="border-[#BA96C1]/30 text-[#4B3F6E] hover:bg-[#BA96C1]/10"
+            disabled={isSubmitting}
           >
             <Eye className="w-4 h-4 mr-2" />
             Preview
@@ -547,9 +625,22 @@ export default function AddFlower() {
             type="button"
             onClick={handleSubmit}
             className="bg-gradient-to-r from-[#6C5F8D] to-[#BA96C1] hover:from-[#4B3F6E] hover:to-[#9C8CB9] text-white shadow-lg hover:shadow-xl transition-all duration-300"
+            disabled={isSubmitting}
           >
-            <Save className="w-4 h-4 mr-2" />
-            Add Flower to Inventory
+            {isSubmitting ? (
+              <span className="flex items-center">
+                <svg className="animate-spin h-4 w-4 mr-2" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                </svg>
+                Saving...
+              </span>
+            ) : (
+              <>
+                <Save className="w-4 h-4 mr-2" />
+                Add Flower to Inventory
+              </>
+            )}
           </Button>
         </div>
       </div>
