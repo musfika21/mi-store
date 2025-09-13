@@ -1,10 +1,11 @@
 "use client"
 import { useState } from "react"
-import { HeroSection } from "./components/Hero"
-import { FeaturesSection } from "./components/Features"
-import { TestimonialsSection } from "./components/Testimonials"
-import { FAQSection } from "./components/FAQ"
-import { CTASection } from "./components/CTA"
+import { HeroSection } from "../components/Hero"
+import { FeaturesSection } from "../components/Features"
+import { TestimonialsSection } from "../components/Testimonials"
+import { FAQSection } from "../components/FAQ"
+import { CTASection } from "../components/CTA"
+
 
 export default function Page() {
   const [dark, setDark] = useState(false)

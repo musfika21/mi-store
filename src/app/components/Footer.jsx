@@ -4,7 +4,7 @@ const Footer = () => {
     return (
         <div className="bg-gray-50 dark:bg-gray-900">
             {/* Footer */}
-            <footer className="bg-gradient-to-br from-[#DCD7D5] via-[#9C8CB9] to-[#BA96C1] dark:from-[#4B3F6E] dark:via-[#6C5F8D] dark:to-[#9C8CB9] text-white relative overflow-hidden">
+            <footer className="bg-gradient-to-br from-[#DCD7D5] via-[#9C8CB9] to-[#BA96C1] dark:from-[#4B3F6E] dark:via-[#6C5F8D] dark:to-[#9C8CB9] text-black dark:text-white relative overflow-hidden">
                 {/* Decorative background elements */}
                 <div className="inset-0 opacity-10">
                     <div className="absolute top-10 left-10 w-32 h-32 rounded-full bg-white/20 blur-xl"></div>
@@ -55,7 +55,7 @@ const Footer = () => {
 
                         {/* Quick Links */}
                         <div>
-                            <h4 className="text-lg font-semibold mb-4 text-white dark:text-[#DCD7D5]">Quick Links</h4>
+                            <h4 className="text-lg font-semibold mb-4">Quick Links</h4>
                             <ul className="space-y-2">
                                 {['Fresh Flowers', 'Wedding Bouquets', 'Corporate Events', 'Seasonal Arrangements', 'Gift Cards', 'About Us'].map((link) => (
                                     <li key={link}>
@@ -69,7 +69,7 @@ const Footer = () => {
 
                         {/* Services */}
                         <div>
-                            <h4 className="text-lg font-semibold mb-4 text-white dark:text-[#DCD7D5]">Services</h4>
+                            <h4 className="text-lg font-semibold mb-4">Services</h4>
                             <ul className="space-y-2">
                                 {['Same Day Delivery', 'Custom Designs', 'Event Planning', 'Subscription Boxes', 'Flower Care Tips', 'Workshops'].map((service) => (
                                     <li key={service}>
@@ -83,35 +83,35 @@ const Footer = () => {
 
                         {/* Contact Info */}
                         <div>
-                            <h4 className="text-lg font-semibold mb-4 text-white dark:text-[#DCD7D5]">Get in Touch</h4>
+                            <h4 className="text-lg font-semibold mb-4">Get in Touch</h4>
                             <div className="space-y-3">
                                 <div className="flex items-center space-x-3">
-                                    <MapPin size={16} className="text-[#BA96C1] dark:text-[#DCD7D5] flex-shrink-0" />
+                                    <MapPin size={16} className="text-[#5b4160] dark:text-[#DCD7D5] flex-shrink-0" />
                                     <span className="text-sm opacity-90">
                                         2004 Flower Street<br />
                                         Garden City, GC 12345
                                     </span>
                                 </div>
                                 <div className="flex items-center space-x-3">
-                                    <Phone size={16} className="text-[#BA96C1] dark:text-[#DCD7D5] flex-shrink-0" />
+                                    <Phone size={16} className="text-[#5b4160] dark:text-[#DCD7D5] flex-shrink-0" />
                                     <span className="text-sm opacity-90">(555) 123-FLOWER</span>
                                 </div>
                                 <div className="flex items-center space-x-3">
-                                    <Mail size={16} className="text-[#BA96C1] dark:text-[#DCD7D5] flex-shrink-0" />
+                                    <Mail size={16} className="text-[#5b4160] dark:text-[#DCD7D5] flex-shrink-0" />
                                     <span className="text-sm opacity-90">musfikaiqfatmomo21@gmail.com</span>
                                 </div>
                             </div>
 
                             {/* Newsletter signup */}
                             <div className="mt-6">
-                                <h5 className="font-medium mb-2 text-white dark:text-[#DCD7D5]">Stay Blooming</h5>
+                                <h5 className="font-medium mb-2">Stay Blooming</h5>
                                 <div className="flex flex-col sm:flex-row gap-2">
                                     <input
                                         type="email"
                                         placeholder="Enter your email"
-                                        className="flex-1 px-3 py-2 bg-white/20 dark:bg-white/10 border border-white/30 dark:border-white/20 rounded-lg text-white placeholder-white/70 text-sm focus:outline-none focus:ring-2 focus:ring-[#BA96C1] dark:focus:ring-[#DCD7D5] focus:bg-white/30 dark:focus:bg-white/20"
+                                        className="flex-1 px-3 py-2 bg-white/20 dark:bg-white/10 border border-white/30 dark:border-white/20 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#BA96C1] dark:focus:ring-[#DCD7D5] focus:bg-white/30 dark:focus:bg-white/20"
                                     />
-                                    <button className="px-4 py-2 bg-[#BA96C1] hover:bg-[#9C8CB9] dark:bg-[#9C8CB9] dark:hover:bg-[#BA96C1] rounded-lg text-sm font-medium transition-colors duration-300 whitespace-nowrap">
+                                    <button className="px-4 py-2 bg-[#5b4160] text-white hover:bg-[#9C8CB9] dark:bg-[#9C8CB9] dark:hover:bg-[#BA96C1] rounded-lg text-sm font-medium transition-colors duration-300 whitespace-nowrap">
                                         Subscribe
                                     </button>
                                 </div>

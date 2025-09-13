@@ -1,11 +1,9 @@
-import { Libre_Baskerville } from "next/font/google"; // Use a valid Google Font
+import { Libre_Baskerville } from "next/font/google";
 import "./globals.css";
-import Navbar from "./components/Navbar";
 import { ThemeProvider } from "./components/theme-provider";
-import Footer from "./components/Footer";
 
 const libreBaskerville = Libre_Baskerville({
-  weight: ["400"], // Valid weight for Libre Baskerville
+  weight: ["400"],
   subsets: ["latin"],
 });
 
@@ -19,9 +17,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={`${libreBaskerville.className} antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <Navbar />
           {children}
-          <Footer />
         </ThemeProvider>
       </body>
     </html>
