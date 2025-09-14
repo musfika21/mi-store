@@ -1,6 +1,7 @@
 import { Libre_Baskerville } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "./components/theme-provider";
+import NextAuthSessionProvider from "@/Providers/NextAuthSessionProvider";
 
 const libreBaskerville = Libre_Baskerville({
   weight: ["400"],
@@ -15,11 +16,13 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${libreBaskerville.className} antialiased`}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          {children}
-        </ThemeProvider>
-      </body>
+      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <NextAuthSessionProvider>
+          <body className={`${libreBaskerville.className} antialiased`}>
+            {children}
+          </body>
+        </NextAuthSessionProvider>
+      </ThemeProvider>
     </html>
   );
 }

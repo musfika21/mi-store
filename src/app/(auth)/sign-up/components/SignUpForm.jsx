@@ -2,31 +2,12 @@
 
 import { RegisterUser } from '@/app/actions/auth/RegisterUsers';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, CheckCircle, Eye, EyeOff, Mail, Phone, User, Lock } from 'lucide-react'
-import React, { useState } from 'react'
+import { ArrowRight, Eye, EyeOff, User, Lock } from 'lucide-react';
+import React, { useState } from 'react';
+import { signIn } from 'next-auth/react';
 
 export default function SignUpForm() {
     const [showPassword, setShowPassword] = useState(false);
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
-    // const [formData, setFormData] = useState({
-    //     firstName: '',
-    //     lastName: '',
-    //     email: '',
-    //     phone: '',
-    //     password: '',
-    //     confirmPassword: '',
-    //     agreeToTerms: false,
-    //     subscribeNewsletter: false
-    // });
-
-    // const handleInputChange = (e) => {
-    //     const { name, value, type, checked } = e.target;
-    //     setFormData(prev => ({
-    //         ...prev,
-    //         [name]: type === 'checkbox' ? checked : value
-    //     }));
-    // };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -36,7 +17,7 @@ export default function SignUpForm() {
         const password = e.target.password.value;
         console.log("Submitted Data:", firstName, lastName, email, password)
         await RegisterUser({ firstName, lastName, email, password })
-    }
+    };
 
     return (
         <div>
@@ -55,8 +36,6 @@ export default function SignUpForm() {
                             <input
                                 type="text"
                                 name="firstName"
-                                // value={formData.firstName}
-                                // onChange={handleInputChange}
                                 className="w-full pl-10 pr-4 py-3 bg-[#DCD7D5]/20 dark:bg-[#4B3F6E]/50 border border-[#BA96C1]/30 dark:border-[#9C8CB9]/40 rounded-lg text-[#4B3F6E] dark:text-[#DCD7D5] placeholder-[#4B3F6E]/50 dark:placeholder-[#DCD7D5]/50 focus:outline-none focus:ring-2 focus:ring-[#9C8CB9]/50 focus:border-transparent transition-all duration-300"
                                 placeholder="First name"
                                 required
@@ -72,8 +51,6 @@ export default function SignUpForm() {
                             <input
                                 type="text"
                                 name="lastName"
-                                // value={formData.lastName}
-                                // onChange={handleInputChange}
                                 className="w-full px-4 py-3 bg-[#DCD7D5]/20 dark:bg-[#4B3F6E]/50 border border-[#BA96C1]/30 dark:border-[#9C8CB9]/40 rounded-lg text-[#4B3F6E] dark:text-[#DCD7D5] placeholder-[#4B3F6E]/50 dark:placeholder-[#DCD7D5]/50 focus:outline-none focus:ring-2 focus:ring-[#9C8CB9]/50 focus:border-transparent transition-all duration-300"
                                 placeholder="Last name"
                             />
@@ -90,8 +67,6 @@ export default function SignUpForm() {
                         <input
                             type="email"
                             name="email"
-                            // value={formData.lastName}
-                            // onChange={handleInputChange}
                             className="w-full px-4 py-3 bg-[#DCD7D5]/20 dark:bg-[#4B3F6E]/50 border border-[#BA96C1]/30 dark:border-[#9C8CB9]/40 rounded-lg text-[#4B3F6E] dark:text-[#DCD7D5] placeholder-[#4B3F6E]/50 dark:placeholder-[#DCD7D5]/50 focus:outline-none focus:ring-2 focus:ring-[#9C8CB9]/50 focus:border-transparent transition-all duration-300"
                             placeholder="enter email"
                             required
@@ -112,8 +87,6 @@ export default function SignUpForm() {
                             <input
                                 type={showPassword ? "text" : "password"}
                                 name="password"
-                                // value={formData.password}
-                                // onChange={handleInputChange}
                                 className="w-full pl-10 pr-12 py-3 bg-[#DCD7D5]/20 dark:bg-[#4B3F6E]/50 border border-[#BA96C1]/30 dark:border-[#9C8CB9]/40 rounded-lg text-[#4B3F6E] dark:text-[#DCD7D5] placeholder-[#4B3F6E]/50 dark:placeholder-[#DCD7D5]/50 focus:outline-none focus:ring-2 focus:ring-[#9C8CB9]/50 focus:border-transparent transition-all duration-300"
                                 placeholder="Create a password"
                                 required
@@ -135,7 +108,7 @@ export default function SignUpForm() {
                 {/* Submit Button */}
                 <Button
                     type="submit"
-                    // disabled={!formData.agreeToTerms}
+                    onClick={() => signIn()}
                     className="w-full group relative overflow-hidden bg-gradient-to-r from-[#6C5F8D] via-[#9C8CB9] to-[#BA96C1] hover:from-[#4B3F6E] hover:via-[#6C5F8D] hover:to-[#9C8CB9] text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl hover:shadow-[#9C8CB9]/40 transition-all duration-300 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                 >
                     <span className="relative z-10 flex items-center justify-center space-x-2">

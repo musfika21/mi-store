@@ -6,6 +6,7 @@ import { TestimonialsSection } from "../components/Testimonials"
 import { FAQSection } from "../components/FAQ"
 import { CTASection } from "../components/CTA"
 import RecentFlowers from "../components/RecentFlowers"
+import UserInfo from "../components/UserInfo"
 
 
 export default function Page() {
@@ -22,6 +23,7 @@ export default function Page() {
 
   return (
     <>
+    <UserInfo/>
       <HeroSection />
       <FeaturesSection />
       <TestimonialsSection/>
