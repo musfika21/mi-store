@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button"
 import {
   Sheet,
@@ -38,11 +38,110 @@ import {
   Flower
 } from "lucide-react";
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 export default function DashboardLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [user, setUser] = useState({
+    firstName: 'User',
+    lastName: '',
+    email: '',
+    role: 'User'
+  });
+  const [loading, setLoading] = useState(true);
+  
   const pathname = usePathname();
+  const router = useRouter();
+
+  // Fetch user data on component mount
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          router.push('/sign-in');
+          return;
+        }
+
+        // First, try to get user data from localStorage if it exists (from signup/login)
+        const storedUserData = localStorage.getItem('userData');
+        if (storedUserData) {
+          try {
+            const parsedData = JSON.parse(storedUserData);
+            setUser({
+              firstName: parsedData.firstName || parsedData.first_name || 'User',
+              lastName: parsedData.lastName || parsedData.last_name || '',
+              email: parsedData.email || '',
+              role: parsedData.role || 'User'
+            });
+            setLoading(false);
+            return;
+          } catch (parseError) {
+            console.log('Error parsing stored user data:', parseError);
+          }
+        }
+
+        // If no stored data, try to decode JWT token to get user info
+        try {
+          const tokenPayload = JSON.parse(atob(token.split('.')[1]));
+          console.log('Token payload:', tokenPayload); // Debug log
+          
+          if (tokenPayload) {
+            setUser({
+              firstName: tokenPayload.firstName || tokenPayload.first_name || tokenPayload.name?.split(' ')[0] || 'User',
+              lastName: tokenPayload.lastName || tokenPayload.last_name || tokenPayload.name?.split(' ')[1] || '',
+              email: tokenPayload.email || '',
+              role: tokenPayload.role || 'User'
+            });
+            setLoading(false);
+            return;
+          }
+        } catch (jwtError) {
+          console.log('Error decoding JWT:', jwtError);
+        }
+
+        // Fallback: Try API call (replace with your actual API endpoint)
+        const response = await fetch('/api/user/profile', {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (response.ok) {
+          const userData = await response.json();
+          console.log('API response:', userData); // Debug log
+          
+          setUser({
+            firstName: userData.firstName || userData.first_name || userData.user?.firstName || 'User',
+            lastName: userData.lastName || userData.last_name || userData.user?.lastName || '',
+            email: userData.email || userData.user?.email || '',
+            role: userData.role || userData.user?.role || 'User'
+          });
+        } else if (response.status === 401) {
+          // Token expired or invalid
+          localStorage.removeItem('token');
+          localStorage.removeItem('userData');
+          router.push('/sign-in');
+        } else {
+          console.log('API call failed with status:', response.status);
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+        // You might want to show a toast notification here
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, [router]);
+
+  // Handle logout
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    router.push('/sign-in');
+  };
 
   // Navigation items - easily customizable for your routes
   const navigationItems = [
@@ -67,6 +166,27 @@ export default function DashboardLayout({ children }) {
       return pathname === '/dashboard';
     }
     return pathname.startsWith(href);
+  };
+
+  // Get user display name
+  const getUserDisplayName = () => {
+    if (loading) return 'Loading...';
+    return user.firstName || 'User';
+  };
+
+  // Get user full name
+  const getUserFullName = () => {
+    if (loading) return 'Loading...';
+    const fullName = `${user.firstName || ''} ${user.lastName || ''}`.trim();
+    return fullName || 'User';
+  };
+
+  // Get user initials for avatar
+  const getUserInitials = () => {
+    if (loading) return 'U';
+    const firstName = user.firstName || 'U';
+    const lastName = user.lastName || '';
+    return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
   };
 
   const SidebarContent = () => (
@@ -121,11 +241,15 @@ export default function DashboardLayout({ children }) {
       <div className="p-4 border-t border-white/20">
         <div className="flex items-center space-x-3 p-3 rounded-xl bg-white/10">
           <div className="w-10 h-10 bg-gradient-to-br from-[#BA96C1] to-[#9C8CB9] rounded-full flex items-center justify-center">
-            <User className="w-5 h-5 text-white" />
+            {loading ? (
+              <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+            ) : (
+              <span className="text-white font-semibold text-sm">{getUserInitials()}</span>
+            )}
           </div>
-          <div className="flex-1">
-            <p className="font-medium">Isabella Rose</p>
-            <p className="text-white/70 text-sm">Admin</p>
+          <div className="flex-1 min-w-0">
+            <p className="font-medium truncate">{getUserFullName()}</p>
+            <p className="text-white/70 text-sm truncate">{user.role}</p>
           </div>
         </div>
       </div>
@@ -168,22 +292,48 @@ export default function DashboardLayout({ children }) {
               {/* User Menu */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button size="sm" className="p-5 bg-[#BA96C1] hover:bg-[#6C5F8D] cursor-pointer">
-                    <div className="w-6 h-6 bg-gradient-to-br from-[#BA96C1] to-[#9C8CB9] rounded-full flex items-center justify-center">
-                      <User className="w-4 h-4 text-white" />
+                  <Button 
+                    size="sm" 
+                    className="p-3 sm:p-4 bg-[#BA96C1] hover:bg-[#6C5F8D] cursor-pointer transition-all duration-200"
+                    disabled={loading}
+                  >
+                    <div className="flex items-center space-x-2">
+                      <div className="w-6 h-6 bg-gradient-to-br from-[#6C5F8D] to-[#9C8CB9] rounded-full flex items-center justify-center">
+                        {loading ? (
+                          <div className="w-3 h-3 border border-white/30 border-t-white rounded-full animate-spin"></div>
+                        ) : (
+                          <span className="text-white font-semibold text-xs">{getUserInitials()}</span>
+                        )}
+                      </div>
+                      <span className="hidden sm:inline text-white font-medium">
+                        {getUserDisplayName()}
+                      </span>
                     </div>
-                    <span className="hidden sm:inline ml-2">Isabella</span>
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56 bg-white/10 p-5">
-                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem className=" cursor-pointer">
+                <DropdownMenuContent align="end" className="w-56 bg-white/95 dark:bg-[#4B3F6E]/95 backdrop-blur-xl border border-[#BA96C1]/30">
+                  <DropdownMenuLabel className="text-[#4B3F6E] dark:text-[#DCD7D5]">
+                    <div className="flex flex-col space-y-1">
+                      <span className="font-semibold">{getUserFullName()}</span>
+                      <span className="text-xs text-[#4B3F6E]/60 dark:text-[#DCD7D5]/60 font-normal">
+                        {user.email}
+                      </span>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator className="bg-[#BA96C1]/20" />
+                  <DropdownMenuItem className="text-[#4B3F6E] dark:text-[#DCD7D5] hover:bg-[#BA96C1]/10 cursor-pointer">
                     <User className="mr-2 h-4 w-4" />
                     Profile
                   </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem className="bg-[#4B3F6E] p-3 mt-2 hover:bg-[#9C8CB9] cursor-pointer">
+                  <DropdownMenuItem className="text-[#4B3F6E] dark:text-[#DCD7D5] hover:bg-[#BA96C1]/10 cursor-pointer">
+                    <Settings className="mr-2 h-4 w-4" />
+                    Settings
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator className="bg-[#BA96C1]/20" />
+                  <DropdownMenuItem 
+                    className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 cursor-pointer focus:bg-red-50 dark:focus:bg-red-900/20"
+                    onClick={handleLogout}
+                  >
                     <LogOut className="mr-2 h-4 w-4" />
                     Log out
                   </DropdownMenuItem>

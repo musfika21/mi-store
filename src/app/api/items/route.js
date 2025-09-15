@@ -1,4 +1,6 @@
-import dbConnect, { collectionsNameObj } from "@/lib/dbConnect";
+"use server"
+
+import { collectionsNameObj, dbConnect } from "@/lib/dbConnect";
 
 // GET all flowers
 export async function GET() {

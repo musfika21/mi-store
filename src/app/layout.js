@@ -1,7 +1,7 @@
 import { Libre_Baskerville } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "./components/theme-provider";
-import NextAuthSessionProvider from "@/Providers/NextAuthSessionProvider";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 const libreBaskerville = Libre_Baskerville({
   weight: ["400"],
@@ -16,13 +16,13 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-        <NextAuthSessionProvider>
-          <body className={`${libreBaskerville.className} antialiased`}>
+      <body className={`${libreBaskerville.className} antialiased`}>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <GoogleOAuthProvider clientId={process.env.GOOGLE_CLIENT_ID}>
             {children}
-          </body>
-        </NextAuthSessionProvider>
-      </ThemeProvider>
+          </GoogleOAuthProvider>
+        </ThemeProvider>
+      </body>
     </html>
   );
 }

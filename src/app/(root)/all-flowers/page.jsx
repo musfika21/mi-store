@@ -1,4 +1,4 @@
-import dbConnect, { collectionsNameObj } from '@/lib/dbConnect'
+import { collectionsNameObj, dbConnect } from '@/lib/dbConnect'
 import Link from 'next/link'
 
 export default async function AllFlowers() {

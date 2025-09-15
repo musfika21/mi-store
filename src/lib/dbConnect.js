@@ -1,18 +1,51 @@
+// lib/dbConnect.js
 import { MongoClient, ServerApiVersion } from 'mongodb';
 
 export const collectionsNameObj = {
-    flowerCollection : "all_flowers",
-    userCollection : "all_users"
+    flowerCollection: "all_flowers",
+    userCollection: "all_users"
+};
+
+let client;
+let clientPromise;
+
+const uri = process.env.MONGO_URI;
+const dbName = process.env.DB_NAME;
+
+if (!uri || !dbName) {
+    throw new Error("Please define MONGO_URI and DB_NAME environment variables.");
 }
 
-export default function dbConnect(collectionName) {
-    const uri = process.env.MONGO_URI;
-    const client = new MongoClient(uri, {
+if (process.env.NODE_ENV === "development") {
+    if (!global._mongoClientPromise) {
+        client = new MongoClient(uri, {
+            serverApi: {
+                version: ServerApiVersion.v1,
+                strict: true,
+                deprecationErrors: true,
+            },
+        });
+        global._mongoClientPromise = client.connect().catch(err => {
+            console.error("MongoDB connection failed:", err);
+            throw err;
+        });
+    }
+    clientPromise = global._mongoClientPromise;
+} else {
+    client = new MongoClient(uri, {
         serverApi: {
             version: ServerApiVersion.v1,
             strict: true,
             deprecationErrors: true,
-        }
+        },
     });
-    return client.db(process.env.DB_NAME).collection(collectionName)
+    clientPromise = client.connect().catch(err => {
+        console.error("MongoDB connection failed:", err);
+        throw err;
+    });
+}
+
+export async function dbConnect(collectionName) {
+    const client = await clientPromise;
+    return client.db(dbName).collection(collectionName);
 }
