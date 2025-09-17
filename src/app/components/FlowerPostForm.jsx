@@ -174,7 +174,7 @@ export default function FlowerPostForm() {
         image: imagePreview // Base64 encoded image
       };
 
-      const response = await fetch('http://localhost:3000/api/items/flower', {
+      const response = await fetch('https://mi-store-rho.vercel.app/api/items/flower', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

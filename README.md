@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🌸 MI Store Dashboard
 
-## Getting Started
+A full-featured **Next.js 13+ Dashboard** application with authentication, protected routes, and flower post management.  
+Built with **React, Next.js App Router, Tailwind CSS, and ShadCN UI**.
 
-First, run the development server:
+## Live Link : https://mi-store-rho.vercel.app
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🚀 Features
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+- 🔐 **Authentication**
+  - JWT-based login & signup
+  - Role-based access (User/Admin)
+  - Protected dashboard routes
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- 🏠 **Dashboard Layout**
+  - Responsive sidebar navigation
+  - Mobile-friendly sheet menu
+  - User profile section with role badge
 
-## Learn More
+- 🌸 **Flower Management**
+  - Add Flower Post (title, description, image, etc.)
+  - Store data securely in MongoDB
+  - Fetch flowers via API routes
 
-To learn more about Next.js, take a look at the following resources:
+- 🎨 **UI/UX**
+  - Styled with **Tailwind CSS**
+  - **ShadCN UI components**
+  - Light/Dark mode support
+  - Lucide-react icons
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🛠️ Tech Stack
 
-## Deploy on Vercel
+- **Frontend**: [Next.js 13+](https://nextjs.org/), React, Tailwind CSS, ShadCN UI  
+- **Backend**: Next.js API Routes (Node.js, Express-like APIs)  
+- **Database**: MongoDB  
+- **Auth**: JWT, LocalStorage (with client-side guards)  
+- **Icons**: Lucide-react  
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📂 Project Structure
+
+app/
+├── (dashboard)/
+│ ├── layout.jsx # Dashboard layout (sidebar, header, auth check)
+│ ├── page.jsx # Main dashboard page
+│ └── add-post/ # Add Flower Post page
+├── sign-in/ # Sign-in page
+├── api/
+│ └── user/
+│ └── profile # API route for user profile
+components/
+├── ui/ # ShadCN UI components
+├── UserInfo.jsx # User profile info (client component)
+└── FlowerPostForm.jsx # Form for creating flower posts
