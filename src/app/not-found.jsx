@@ -9,16 +9,23 @@ import {
     Flower,
     Flower2,
     Cherry,
-    RefreshCw,
-    Mail
 } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export default function FloralNotFound() {
+    const [isClient, setIsClient] = useState(false);
+
+    // Set isClient to true after component mounts (hydration)
+    useEffect(() => {
+        setIsClient(true);
+    }, []);
 
     const handleGoBack = () => {
-        // Go back in browser history
-        window.history.back();
+        // Only run on client side
+        if (typeof window !== 'undefined') {
+            window.history.back();
+        }
     };
 
     const handleSearch = () => {
@@ -30,6 +37,15 @@ export default function FloralNotFound() {
         // Contact support
         console.log('Opening contact support...');
     };
+
+    // Show loading state during SSR/hydration
+    if (!isClient) {
+        return (
+            <div className="min-h-screen bg-gradient-to-br from-[#F8F6FF] via-[#FDF2F8] to-[#FEF7ED] dark:from-[#1F1B29] dark:via-[#2D1B36] dark:to-[#3A2545] flex items-center justify-center p-4">
+                <div className="w-8 h-8 border-2 border-[#BA96C1]/30 border-t-[#BA96C1] rounded-full animate-spin"></div>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-[#F8F6FF] via-[#FDF2F8] to-[#FEF7ED] dark:from-[#1F1B29] dark:via-[#2D1B36] dark:to-[#3A2545] flex items-center justify-center p-4">
@@ -103,20 +119,6 @@ export default function FloralNotFound() {
                 <div className="absolute top-3/4 right-1/3 w-1 h-1 bg-[#9C8CB9] rounded-full animate-pulse opacity-40"></div>
                 <div className="absolute bottom-1/4 left-1/3 w-3 h-3 bg-[#BA96C1] rounded-full animate-bounce opacity-20"></div>
             </div>
-
-            <style jsx>{`
-        @keyframes spin-slow {
-          from {
-            transform: rotate(0deg);
-          }
-          to {
-            transform: rotate(360deg);
-          }
-        }
-        .animate-spin-slow {
-          animation: spin-slow 8s linear infinite;
-        }
-      `}</style>
         </div>
     );
 }

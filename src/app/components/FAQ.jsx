@@ -1,3 +1,5 @@
+"use client";
+
 import { ChevronDown, ChevronUp, Sparkles } from "lucide-react";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 

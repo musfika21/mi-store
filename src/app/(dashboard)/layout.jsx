@@ -4,11 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button"
 import {
   Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
+  SheetContent
 } from "@/components/ui/sheet"
 import {
   DropdownMenu,
@@ -22,18 +18,9 @@ import { Badge } from "@/components/ui/badge"
 import {
   Menu,
   Home,
-  Package,
-  ShoppingCart,
-  Users,
-  Calendar,
-  BarChart3,
   Settings,
-  Bell,
   User,
   LogOut,
-  Search,
-  Package2,
-  Truck,
   Sparkles,
   Flower
 } from "lucide-react";
@@ -49,12 +36,21 @@ export default function DashboardLayout({ children }) {
     role: 'User'
   });
   const [loading, setLoading] = useState(true);
+  const [isClient, setIsClient] = useState(false);
   
   const pathname = usePathname();
   const router = useRouter();
 
+  // Set isClient to true after component mounts (hydration)
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   // Fetch user data on component mount
   useEffect(() => {
+    // Only run on client side
+    if (!isClient) return;
+
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem('token');
@@ -135,11 +131,14 @@ export default function DashboardLayout({ children }) {
     };
 
     fetchUserData();
-  }, [router]);
+  }, [router, isClient]);
 
   // Handle logout
   const handleLogout = () => {
-    localStorage.removeItem('token');
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('token');
+      localStorage.removeItem('userData');
+    }
     router.push('/sign-in');
   };
 
@@ -255,6 +254,15 @@ export default function DashboardLayout({ children }) {
       </div>
     </div>
   );
+
+  // Don't render the component until after hydration to avoid SSR issues
+  if (!isClient) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-[#DCD7D5] via-[#DCD7D5]/90 to-[#BA96C1]/30 dark:from-[#4B3F6E] dark:via-[#4B3F6E]/90 dark:to-[#6C5F8D]/40 flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-[#BA96C1]/30 border-t-[#BA96C1] rounded-full animate-spin"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#DCD7D5] via-[#DCD7D5]/90 to-[#BA96C1]/30 dark:from-[#4B3F6E] dark:via-[#4B3F6E]/90 dark:to-[#6C5F8D]/40">

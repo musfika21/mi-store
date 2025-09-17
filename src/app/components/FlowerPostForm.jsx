@@ -36,7 +36,7 @@ import {
 import Image from 'next/image';
 import toast, { Toaster } from 'react-hot-toast';
 
-export default function AddFlower() {
+export default function FlowerPostForm() {
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -174,7 +174,7 @@ export default function AddFlower() {
         image: imagePreview // Base64 encoded image
       };
 
-      const response = await fetch('http://localhost:3000/api/items', {
+      const response = await fetch('http://localhost:3000/api/items/flower', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -266,8 +266,8 @@ export default function AddFlower() {
               {/* Image Upload Area */}
               <div
                 className={`relative border-2 border-dashed rounded-xl p-6 text-center transition-all duration-300 ${dragActive
-                    ? 'border-[#9C8CB9] bg-[#BA96C1]/50'
-                    : 'border-[#BA96C1]/30 hover:border-[#9C8CB9]/50'
+                  ? 'border-[#9C8CB9] bg-[#BA96C1]/50'
+                  : 'border-[#BA96C1]/30 hover:border-[#9C8CB9]/50'
                   } bg-[#f9f9f9] dark:bg-[#1a1a1a]`}
                 onDrop={handleDrop}
                 onDragOver={handleDragOver}
@@ -527,8 +527,8 @@ export default function AddFlower() {
                     key={occasion}
                     variant={formData.occasion.includes(occasion) ? "default" : "outline"}
                     className={`cursor-pointer transition-all duration-300 ${formData.occasion.includes(occasion)
-                        ? 'bg-gradient-to-r from-[#6C5F8D] to-[#BA96C1] text-white hover:from-[#4B3F6E] hover:to-[#9C8CB9]'
-                        : 'border-[#BA96C1]/30 text-[#4B3F6E] hover:bg-[#BA96C1]/10'
+                      ? 'bg-gradient-to-r from-[#6C5F8D] to-[#BA96C1] text-white hover:from-[#4B3F6E] hover:to-[#9C8CB9]'
+                      : 'border-[#BA96C1]/30 text-[#4B3F6E] hover:bg-[#BA96C1]/10'
                       }`}
                     onClick={() => toggleOccasion(occasion)}
                   >
